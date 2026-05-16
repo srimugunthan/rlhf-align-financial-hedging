@@ -7,8 +7,8 @@ transformers>=4.38.0
 datasets>=2.18.0
 accelerate>=0.27.0
 
-# RLHF / PPO
-trl>=0.8.0
+# RLHF / PPO — pin to last version with the old PPOTrainer + AutoModelForCausalLMWithValueHead API
+trl==0.9.6
 
 # Evaluation & plotting
 matplotlib>=3.7.0
