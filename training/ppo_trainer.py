@@ -164,6 +164,10 @@ def run_ppo_training(
 
     logger.info("PPO training complete ✅")
 
+    policy_model.save_pretrained(str(cfg.paths.ppo_checkpoint))
+    tokenizer.save_pretrained(str(cfg.paths.ppo_checkpoint))
+    logger.info(f"PPO checkpoint saved to {cfg.paths.ppo_checkpoint}")
+
     return policy_model, training_log
 
 

@@ -88,10 +88,9 @@ def run_sft(
     trainer.train()
     logger.info("SFT training complete ✅")
 
-    if cfg.sft.save_strategy != "no":
-        model.save_pretrained(str(cfg.paths.sft_checkpoint))
-        tokenizer.save_pretrained(str(cfg.paths.sft_checkpoint))
-        logger.info(f"SFT checkpoint saved to {cfg.paths.sft_checkpoint}")
+    model.save_pretrained(str(cfg.paths.sft_checkpoint))
+    tokenizer.save_pretrained(str(cfg.paths.sft_checkpoint))
+    logger.info(f"SFT checkpoint saved to {cfg.paths.sft_checkpoint}")
 
     return model, tokenizer
 
