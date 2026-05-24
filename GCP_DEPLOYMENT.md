@@ -111,7 +111,17 @@ gcloud compute instances create rlhf-trainer-cpu \
 
 ## 4. SSH into the VM
 
+If the VM is already running:
+
 ```bash
+gcloud compute ssh rlhf-trainer --zone=asia-south1-b
+```
+
+If the VM is stopped, start it first:
+
+```bash
+gcloud compute instances start rlhf-trainer --zone=asia-south1-b
+# Then SSH in:
 gcloud compute ssh rlhf-trainer --zone=asia-south1-b
 ```
 
@@ -145,6 +155,10 @@ uv pip install -r requirements.txt
 
 ```bash
 uv run python scripts/train_all.py
+
+
+
+
 ```
 
 ### Production-quality run (GPU recommended)
@@ -198,6 +212,18 @@ The demo requires trained checkpoints. Run the full pipeline first (Step 6), the
 
 ```bash
 uv run python demo/app.py
+
+
+gcloud config set project nanochat-run
+gcloud compute ssh rlhf-trainer --zone=asia-south1-b -- -L 7860:localhost:7860
+OR
+
+
+gcloud compute ssh rlhf-trainer --zone=asia-south1-b --project=nanochat-run -- -L 7860:localhost:7860
+Verify the instance exists first:
+
+
+gcloud compute instances list --project=nanochat-run
 ```
 
 The app binds to port `7860`. To access it from your local browser, open a second terminal and create an SSH tunnel:
