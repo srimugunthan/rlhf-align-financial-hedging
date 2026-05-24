@@ -22,6 +22,12 @@ The **KL divergence penalty** is the critical stabiliser — it prevents the
 policy from drifting into incoherent hedge-word stuffing (reward hacking)
 while still improving hedge quality.
 
+## DEMO
+
+
+https://github.com/user-attachments/assets/62561ca6-f5bc-43dc-9e91-74be65310c2f
+
+
 ---
 
 ## Project Structure
