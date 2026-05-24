@@ -1,12 +1,11 @@
 """
 RLHF Financial Hedging — Combined Gradio Demo
 
-Launches all three tabs in a single app.
+Launches both tabs in a single app.
 Each tab can also be run as a standalone app:
 
-    Tab 1 — Compare Models      →  uv run python demo/app_compare.py        (port 7860)
+    Tab 1 — Compare Models       →  uv run python demo/app_compare.py        (port 7860)
     Tab 2 — Hedge Score Analyser →  uv run python demo/app_hedge_analyser.py (port 7861)
-    Tab 3 — Reward Hacking       →  uv run python demo/app_reward_hacking.py (port 7862)
 
 Requires models to be trained first:
     uv run python scripts/train_all.py
@@ -30,7 +29,6 @@ from demo.app_compare import (
     compare,
 )
 from demo.app_hedge_analyser import analyse_text
-from demo.app_reward_hacking import HACKING_MD
 
 from data.corpus import FINANCIAL_PROMPTS
 
@@ -129,10 +127,6 @@ speculative overconfidence using the full RLHF pipeline (SFT → RM → PPO).
                 inputs=text_input,
                 outputs=[score_out, breakdown_out],
             )
-
-        # ── Tab 3: Reward Hacking ─────────────────────────────────────────────
-        with gr.Tab("Reward Hacking"):
-            gr.Markdown(HACKING_MD)
 
     return demo
 

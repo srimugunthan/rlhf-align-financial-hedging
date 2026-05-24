@@ -4,6 +4,15 @@ Use these prompts in the **Compare Models** tab of the Gradio demo (`demo/app.py
 They are organised by category to reveal the contrast between the SFT and PPO models clearly.
 
 ---
+## 🟢 Patter1 1 — "Whether X will…" starters
+
+Whether inflation will continue to rise
+
+Whether the Federal Reserve will cut interest rates next quarter
+
+Whether the company's earnings will beat analyst expectations
+
+Whether the stock market will recover depends on
 
 ## 🟢 Category 1 — Macroeconomic Events
 *These are in the training distribution — expect PPO to hedge cleanly.*
