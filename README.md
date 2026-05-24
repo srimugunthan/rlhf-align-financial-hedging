@@ -61,8 +61,11 @@ rlhf_financial_hedging/
 │   └── test_reward_model.py
 │
 ├── demo/
-│   ├── compare.py          # Option C: CLI side-by-side SFT vs PPO comparison
-│   └── app.py              # Option D: Gradio interactive web demo
+│   ├── compare.py              # Option C: CLI side-by-side SFT vs PPO comparison
+│   ├── app.py                  # Option D: Gradio app — all three tabs combined
+│   ├── app_compare.py          # Standalone: Compare Models tab only     (port 7860)
+│   ├── app_hedge_analyser.py   # Standalone: Hedge Score Analyser tab only (port 7861)
+│   └── app_reward_hacking.py   # Standalone: Reward Hacking tab only     (port 7862)
 │
 ├── outputs/                # Checkpoints, plots, logs (auto-created)
 ├── requirements.txt
@@ -166,20 +169,53 @@ The Federal Reserve will definitely raise rates 100% — massive gains!     | Th
   Hedge score: 0.119                                                         Hedge score: 0.731  (+0.612) ✅
 ```
 
-### Option D — Gradio Web App (`demo/app.py`)
+### Option D — Gradio Web App
 
-Launches a local web UI at `http://localhost:7860` with three tabs:
+The Gradio demo is split into **three standalone apps** — one per tab — plus a
+combined app that shows all three together.
 
-| Tab | What it does |
-|-----|-------------|
-| **Compare Models** | Type a prompt, see SFT vs PPO completions side-by-side with hedge scores |
-| **Hedge Score Analyser** | Paste any text for a full breakdown of which words drove the score |
-| **Reward Hacking** | Explains why the KL penalty is critical, with concrete examples |
+| App | Tab shown | Port | Needs trained models? |
+|-----|-----------|------|-----------------------|
+| `demo/app_compare.py` | Compare Models | 7860 | ✅ Yes |
+| `demo/app_hedge_analyser.py` | Hedge Score Analyser | 7861 | ❌ No |
+| `demo/app_reward_hacking.py` | Reward Hacking | 7862 | ❌ No |
+| `demo/app.py` | All three tabs | 7860 | ✅ Yes |
+
+#### Run a single tab
+
+```bash
+# Tab 1 — Compare SFT vs PPO completions side-by-side (requires trained checkpoints)
+uv run python demo/app_compare.py
+# Open http://localhost:7860
+
+# Tab 2 — Paste any text and get a full hedge score breakdown (no models needed)
+uv run python demo/app_hedge_analyser.py
+# Open http://localhost:7861
+
+# Tab 3 — Reward hacking explainer with KL penalty rationale (no models needed)
+uv run python demo/app_reward_hacking.py
+# Open http://localhost:7862
+```
+
+#### Run all three tabs together
 
 ```bash
 uv run python demo/app.py
 # Open http://localhost:7860
 ```
+
+#### Tab descriptions
+
+| Tab | What it does |
+|-----|-------------|
+| **Compare Models** | Type a prompt, see SFT vs PPO completions side-by-side with hedge scores and score delta |
+| **Hedge Score Analyser** | Paste any financial text for a full breakdown of which words drove the score up or down |
+| **Reward Hacking** | Static explainer — shows gamed outputs and why the KL penalty is critical |
+
+> **Tip for clear SFT vs PPO contrast:** Use forward-looking prompts such as
+> `Whether inflation will continue to rise` or `The risk of a market correction`
+> rather than short neutral starters like `The Federal Reserve`.
+> See [`test_prompts.md`](test_prompts.md) for a full categorised prompt list.
 
 ---
 
