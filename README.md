@@ -243,6 +243,61 @@ R_total(x, y) = r_RM(x, y) - β × KL(π_θ(y|x) ‖ π_SFT(y|x))
 | Low (0.05) | Aggressive reward optimisation; risk of hacking |
 | Adaptive (default) | Auto-adjusts β to hit `target_kl` |
 
+### Hedge Score (`utils/reward_utils.py`)
+
+The hedge score acts as a proxy for human preference annotations. It is used
+to train the reward model (Stage 2) and to evaluate PPO policy improvement (Stage 3).
+
+**Formula:**
+
+```
+raw   = hedge_count − (1.5 × spec_count) − caps_penalty − exclaim_penalty
+score = sigmoid(raw)  =  1 / (1 + e^(−raw))        ∈ [0, 1]
+```
+
+**Components:**
+
+| Component | Calculation | Effect |
+|---|---|---|
+| `hedge_count` | Number of distinct hedge words/phrases present (e.g. `may`, `could`, `volatility`, `depending on`) | Increases score |
+| `spec_count` | Number of distinct speculative phrases present (e.g. `guaranteed`, `skyrocket`, `100%`) | Decreases score (×1.5 weight) |
+| `caps_penalty` | `(ratio of uppercase chars) × 2.0` | Penalises ALL-CAPS hype |
+| `exclaim_penalty` | `min(count of "!" × 0.3, 1.0)` | Penalises exclamation marks, capped at 1.0 |
+
+**Worked example:**
+
+```
+"The stock may decline if inflation persists beyond the current quarter."
+
+  hedge_count    = 2   (may, if)
+  spec_count     = 0
+  caps_penalty   ≈ 0   (only one capital letter)
+  exclaim_penalty= 0
+
+  raw   = 2 − 0 − 0 − 0 = 2.0
+  score = sigmoid(2.0) ≈ 0.878  ✅  well-hedged
+```
+
+```
+"This stock will DEFINITELY skyrocket! Guaranteed massive gains!"
+
+  hedge_count    = 0
+  spec_count     = 3   (will definitely, skyrocket, guaranteed)
+  caps_penalty   ≈ 0.6 (DEFINITELY is all-caps)
+  exclaim_penalty= 0.3 (one "!")
+
+  raw   = 0 − (1.5 × 3) − 0.6 − 0.3 = −5.4
+  score = sigmoid(−5.4) ≈ 0.005  ❌  speculative
+```
+
+**Score interpretation:**
+
+| Score | Meaning |
+|---|---|
+| → 1.0 | Well-hedged, cautious language (preferred) |
+| 0.5 | Neutral / empty input |
+| → 0.0 | Speculative, overconfident language (dispreferred) |
+
 ### Reward Hacking
 
 Without KL penalty, the model learns to stuff hedge words with no coherent
