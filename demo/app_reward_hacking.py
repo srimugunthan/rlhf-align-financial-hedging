@@ -9,7 +9,7 @@ No model training required — this is a static explainer page.
 
 Usage:
     uv run python demo/app_reward_hacking.py
-    # Then open http://localhost:7862 in your browser
+    # Then open http://localhost:7860 in your browser
 """
 
 import sys
@@ -101,4 +101,4 @@ This page explains a key failure mode in RLHF training and how the
 if __name__ == "__main__":
     ui = build_ui()
     ui.queue(max_size=10)
-    ui.launch(server_name="0.0.0.0", server_port=7862, share=False, show_error=True)
+    ui.launch(server_name="0.0.0.0", server_port=7860, share=False, show_error=True)

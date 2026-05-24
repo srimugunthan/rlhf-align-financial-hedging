@@ -9,7 +9,7 @@ scoring function from utils/reward_utils.py.
 
 Usage:
     uv run python demo/app_hedge_analyser.py
-    # Then open http://localhost:7861 in your browser
+    # Then open http://localhost:7860 in your browser
 """
 
 import sys
@@ -131,4 +131,4 @@ The score is computed as `sigmoid(hedge_words − 1.5×speculative_words − cap
 if __name__ == "__main__":
     ui = build_ui()
     ui.queue(max_size=10)
-    ui.launch(server_name="0.0.0.0", server_port=7861, share=False, show_error=True)
+    ui.launch(server_name="0.0.0.0", server_port=7860, share=False, show_error=True)

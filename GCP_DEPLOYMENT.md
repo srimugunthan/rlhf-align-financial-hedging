@@ -251,6 +251,29 @@ gcloud compute instances add-tags rlhf-trainer \
 Then navigate to `http://EXTERNAL_IP:7860`. Delete the rule when done:
 
 ```bash
+
+
+
+gcloud compute instances remove-tags rlhf-trainer \
+    --tags rlhf-demo \
+    --zone asia-south1-b
+
+
+# All firewall rules in the project
+gcloud compute firewall-rules list
+
+# Filter to only your Gradio/RLHF rules
+gcloud compute firewall-rules list --filter="name~rlhf OR name~gradio"
+
+# Step 1 — see what tags the VM has
+gcloud compute instances describe rlhf-trainer \
+    --zone asia-south1-b \
+    --format="get(tags.items)"
+
+# Step 2 — find firewall rules that target those tags
+gcloud compute firewall-rules list \
+    --filter="targetTags=rlhf-demo"
+
 gcloud compute firewall-rules delete allow-gradio
 ```
 
